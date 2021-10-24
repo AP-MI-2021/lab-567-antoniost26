@@ -1,10 +1,9 @@
-from Logic.crud import create
-from Tests.test_crud import test_crud
+from Tests.test_crud import test_crud, get_data
 from UserInterface.console import run_ui
 
 
 def main():
-    cheltuieli = []
+    cheltuieli = get_data()
     cheltuieli = run_ui(cheltuieli)
 
 

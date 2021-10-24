@@ -1,9 +1,10 @@
-from Domain.cheltuieli import get_str, creeaza_cheltuiala
+from Domain.cheltuieli import get_str, creeaza_cheltuiala, get_numar, get_id
 from Logic.crud import create, read, update, delete
 
 
 def show_menu():
-    print("1. Deschideti interfata CRUD")
+    print("1. Deschideti interfata CRUD.")
+    print("2. Stergerea tutror cheltuielilor pentru un apartament dat.")
     print("x. Iesire")
 
 
@@ -74,12 +75,22 @@ def handle_crud(cheltuieli):
             print('Optiune gresita! Reintroduceti optiunea.')
     return cheltuieli
 
+
+def handle_delete_for_ap_number(cheltuieli):
+    nr_ap = int(input('Introduceti numarul apartamentului pentru care doriti sa stergeti toate cheltuielile: '))
+    for cheltuiala in cheltuieli:
+        if nr_ap == get_numar(cheltuiala):
+            cheltuieli = delete(cheltuieli, get_numar(cheltuiala), get_id(cheltuiala))
+    return cheltuieli
+
 def run_ui(cheltuieli):
     while True:
         show_menu()
         optiune = input('Dati optiunea: ')
         if optiune == '1':
             cheltuieli = handle_crud(cheltuieli)
+        elif optiune == '2':
+            cheltuieli = handle_delete_for_ap_number(cheltuieli)
         elif optiune == 'x':
             break
         else:
