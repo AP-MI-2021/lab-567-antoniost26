@@ -46,9 +46,9 @@ def test_delete():
     cheltuieli = get_data()
     to_delete_ap = 99
     to_delete_id = 1
-    c_deleted = []
+    c_deleted = None
     for c in [x for x in cheltuieli if to_delete_ap == get_numar(x) and to_delete_id == get_id(x)]:
-        c_deleted.append(c)
+        c_deleted = c
     deleted = delete(cheltuieli, to_delete_ap, to_delete_id)
     assert c_deleted not in deleted
     assert c_deleted in cheltuieli

@@ -53,9 +53,8 @@ def delete(lst_cheltuieli, numar_apartament, id):
     :return:returneaza lista finala, din care va fi stearsa cheltuiala respectiva.
     '''
     new_cheltuieli = []
-    for cheltuiala in [cheltuiala for cheltuiala in lst_cheltuieli if get_numar(cheltuiala) != numar_apartament]:
+    for cheltuiala in [x for x in lst_cheltuieli if get_numar(x) != numar_apartament]:
         new_cheltuieli.append(cheltuiala)
-    print(read(lst_cheltuieli, numar_apartament))
-    for cheltuiala in [cheltuiala for cheltuiala in lst_cheltuieli if id != get_id(cheltuiala)]:
+    for cheltuiala in [x for x in lst_cheltuieli if numar_apartament == get_numar(x) and id != get_id(x)]:
         new_cheltuieli.append(cheltuiala)
     return new_cheltuieli

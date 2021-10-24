@@ -63,4 +63,4 @@ def get_tipul(cheltuiala):
 
 
 def get_str(cheltuiala):
-    return f'Cheltuiala cu id-ul {get_id(cheltuiala)}, pentru numarul apartamentului {get_numar(cheltuiala)}, cu suma de {get_suma(cheltuiala)}, in data de {get_data(cheltuiala)} si de tipul {get_tipul(cheltuiala)}'
+    return f'Cheltuiala cu id-ul {get_id(cheltuiala)}, pentru numarul apartamentului {get_numar(cheltuiala)}, cu suma de {get_suma(cheltuiala)}, in data de {get_date(cheltuiala)} si de tipul {get_tipul(cheltuiala)}'
