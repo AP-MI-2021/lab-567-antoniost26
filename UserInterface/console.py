@@ -45,6 +45,14 @@ def handle_delete(cheltuieli):
     return delete(cheltuieli, numar_ap, id_ap)
 
 
+def handle_delete_for_ap_number(cheltuieli):
+    nr_ap = int(input('Introduceti numarul apartamentului pentru care doriti sa stergeti toate cheltuielile: '))
+    for cheltuiala in cheltuieli:
+        if nr_ap == get_numar(cheltuiala):
+            cheltuieli = delete(cheltuieli, get_numar(cheltuiala), get_id(cheltuiala))
+    return cheltuieli
+
+
 def show_crud_menu():
     print('1. Adaugare cheltuieli')
     print('2. Modificare cheltuieli')
@@ -76,12 +84,7 @@ def handle_crud(cheltuieli):
     return cheltuieli
 
 
-def handle_delete_for_ap_number(cheltuieli):
-    nr_ap = int(input('Introduceti numarul apartamentului pentru care doriti sa stergeti toate cheltuielile: '))
-    for cheltuiala in cheltuieli:
-        if nr_ap == get_numar(cheltuiala):
-            cheltuieli = delete(cheltuieli, get_numar(cheltuiala), get_id(cheltuiala))
-    return cheltuieli
+
 
 def run_ui(cheltuieli):
     while True:

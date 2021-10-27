@@ -17,11 +17,11 @@ def creeaza_cheltuiala(id_cheltuiala, numar_apartament, suma, data, tipul):
     ]
 
 
-''''id':'''
-'''numar:'''
-''''suma':'''
-''''data':'''
-''''tip':'''
+#'id':
+#'numar:
+#'suma':
+#'data':
+#'tip':
 
 
 def get_id(cheltuiala):
