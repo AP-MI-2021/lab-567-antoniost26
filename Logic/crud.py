@@ -1,4 +1,4 @@
-from Domain.cheltuieli import creeaza_cheltuiala, get_numar, get_id
+from Domain.cheltuieli import creeaza_cheltuiala, get_numar, get_id, get_by_id
 
 
 def create(lst_cheltuieli, id_cheltuiala, numar_apartament, suma, data, tipul):
@@ -12,6 +12,8 @@ def create(lst_cheltuieli, id_cheltuiala, numar_apartament, suma, data, tipul):
     :param tipul: tipul cheltuielii, intretinere/canal/alte cheltuieli.
     :return: returneaza o lista in care este adaugata noua cheltuiala.
     '''
+    if get_by_id(id, lst_cheltuieli) is not None:
+        raise ValueError("Id-ul exista deja.")
     cheltuiala = creeaza_cheltuiala(id_cheltuiala, numar_apartament, suma, data, tipul)
     return lst_cheltuieli + [cheltuiala]
 
@@ -35,6 +37,8 @@ def update(lst_cheltuieli, new_cheltuiala):
     :param new_cheltuiala: noua cheltuiala, dupa care va fi modificata cea veche.
     :return: lista actualizata cu toate cheltuielile.
     '''
+    if get_by_id(get_id(new_cheltuiala), lst_cheltuieli) is None:
+        raise ValueError("Nu exista o cheltuiala cu id-ul dat.")
     new_cheltuieli = []
     for cheltuiala in lst_cheltuieli:
         if get_numar(cheltuiala) != get_numar(new_cheltuiala):
@@ -52,6 +56,8 @@ def delete(lst_cheltuieli, numar_apartament, id):
     :param numar_apartament: numarul apartamentului a carei cheltuiala va urma sa fie stearsa.
     :return:returneaza lista finala, din care va fi stearsa cheltuiala respectiva.
     '''
+    if get_by_id(id, lst_cheltuieli) is None:
+        raise ValueError("Nu exista o cheltuiala cu id-ul dat.")
     new_cheltuieli = []
     for cheltuiala in [x for x in lst_cheltuieli if get_numar(x) != numar_apartament]:
         new_cheltuieli.append(cheltuiala)

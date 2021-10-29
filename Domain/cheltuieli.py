@@ -8,13 +8,13 @@ def creeaza_cheltuiala(id_cheltuiala, numar_apartament, suma, data, tipul):
     :param tipul: tipul cheltuielii, intretinere/canal/alte cheltuieli - string.
     :return: o cheltuiala.
     '''
-    return [
-        int(id_cheltuiala),
-        int(numar_apartament),
-        float(suma),
-        str(data),
-        str(tipul),
-    ]
+    return {
+        'id': int(id_cheltuiala),
+        'numar': int(numar_apartament),
+        'suma': float(suma),
+        'data': str(data),
+        'tip': str(tipul),
+    }
 
 
 #'id':
@@ -30,8 +30,18 @@ def get_id(cheltuiala):
     :param cheltuiala: o cheltuiala de tip dictionar.
     :return: id-ul cheltuielii date ca parametru.
     '''
-    return cheltuiala[0]
+    return cheltuiala['id']
 
+def get_by_id(id, cheltuieli):
+    '''
+    Functie folosita pentru exceptie, in care id-ul deja se afla in cheltuieli.
+    :param id: id-ul chetluielii.
+    :param cheltuieli: lista de cheltuieli.
+    :return: returneaza cheltuiala cu id-ul dat.
+    '''
+    for cheltuiala in cheltuieli:
+        if get_id(cheltuiala) == id:
+            return cheltuiala
 
 def get_numar(cheltuiala):
     '''
@@ -39,7 +49,7 @@ def get_numar(cheltuiala):
     :param cheltuiala: o cheltuiala de tip dictionar.
     :return: numarul apartamentului din cheltuiala ca parametru.
     '''
-    return cheltuiala[1]
+    return cheltuiala['numar']
 
 
 def get_suma(cheltuiala):
@@ -48,7 +58,7 @@ def get_suma(cheltuiala):
     :param cheltuiala: o cheltuiala de tip dictionar.
     :return: suma cheltuielii aferente ca parametru.
     '''
-    return cheltuiala[2]
+    return cheltuiala['suma']
 
 
 def get_date(cheltuiala):
@@ -57,7 +67,7 @@ def get_date(cheltuiala):
     :param cheltuiala:  o cheltuiala de tip dictionar.
     :return: data cheltuielii aferente ca parametru.
     '''
-    return cheltuiala[3]
+    return cheltuiala['data']
 
 
 def get_tipul(cheltuiala):
@@ -66,8 +76,8 @@ def get_tipul(cheltuiala):
     :param cheltuiala: o cheltuiala de tip dictionar.
     :return: tipul cheltuielii aferente ca parametru.
     '''
-    return cheltuiala[4]
+    return cheltuiala['tip']
 
 
 def get_str(cheltuiala):
-    return f'Cheltuiala cu id-ul {get_id(cheltuiala)}, pentru numarul apartamentului {get_numar(cheltuiala)}, cu suma de {get_suma(cheltuiala)}, in data de {get_date(cheltuiala)} si de tipul {get_tipul(cheltuiala)}'
+    return f'Cheltuiala cu id-ul {get_id(cheltuiala)}, pentru numarul apartamentului {get_numar(cheltuiala)}, cu suma de {get_suma(cheltuiala)} lei, in data de {get_date(cheltuiala)} si de tipul {get_tipul(cheltuiala)}'
