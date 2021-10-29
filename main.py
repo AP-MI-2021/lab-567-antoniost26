@@ -3,7 +3,7 @@ from UserInterface.console import run_ui
 
 
 def main():
-    cheltuieli = ()     # pentru cheltuieli predefinite folositi get_data() pentru a initializa  variabila cheltuieli;
+    cheltuieli = get_data()     # pentru cheltuieli predefinite folositi get_data() pentru a initializa  variabila cheltuieli;
     cheltuieli = run_ui(cheltuieli)
 
 

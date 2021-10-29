@@ -10,7 +10,7 @@ def add_value_to_all(suma, cheltuieli):
     '''
     new_cheltuieli = []
     for cheltuiala in cheltuieli:
-        cheltuiala['suma'] += suma
+        cheltuiala[2] += suma
         new_cheltuieli.append(cheltuiala)
     return new_cheltuieli
 
