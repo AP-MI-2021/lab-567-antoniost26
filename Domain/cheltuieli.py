@@ -1,4 +1,10 @@
-def creeaza_cheltuiala(id_cheltuiala, numar_apartament, suma, data, tipul):
+from datetime import date, datetime
+
+
+tipuri_permise = ['intretinere', 'canal', 'alte cheltuieli']
+
+
+def creeaza_cheltuiala(id_cheltuiala: int, numar_apartament: int, suma: float, data: str, tipul: str):
     '''
     Creeaza o cheltuiala.
     :param id_cheltuiala: id-ul cheltuielii, trebuie sa fie unic - int.
@@ -8,20 +14,19 @@ def creeaza_cheltuiala(id_cheltuiala, numar_apartament, suma, data, tipul):
     :param tipul: tipul cheltuielii, intretinere/canal/alte cheltuieli - string.
     :return: o cheltuiala.
     '''
+    if tipul not in tipuri_permise:
+        raise ValueError(f"tipurile permise sunt: {tipuri_permise}")
+
+    if isinstance(data, str):
+        data = str_to_date(data)
+
     return [
         int(id_cheltuiala),
         int(numar_apartament),
         float(suma),
-        str(data),
+        data,
         str(tipul),
     ]
-
-
-#'id':
-#'numar:
-#'suma':
-#'data':
-#'tip':
 
 
 def get_id(cheltuiala):
@@ -31,6 +36,7 @@ def get_id(cheltuiala):
     :return: id-ul cheltuielii date ca parametru.
     '''
     return cheltuiala[0]
+
 
 def get_by_id(id, cheltuieli):
     '''
@@ -42,6 +48,7 @@ def get_by_id(id, cheltuieli):
     for cheltuiala in cheltuieli:
         if get_id(cheltuiala) == id:
             return cheltuiala
+
 
 def get_numar(cheltuiala):
     '''
@@ -80,4 +87,15 @@ def get_tipul(cheltuiala):
 
 
 def get_str(cheltuiala):
-    return f'Cheltuiala cu id-ul {get_id(cheltuiala)}, pentru numarul apartamentului {get_numar(cheltuiala)}, cu suma de {get_suma(cheltuiala)} lei, in data de {get_date(cheltuiala)} si de tipul {get_tipul(cheltuiala)}'
+    return f'Cheltuiala cu id-ul {get_id(cheltuiala)}, pentru numarul apartamentului {get_numar(cheltuiala)}, cu suma '\
+           f'de {get_suma(cheltuiala)} lei, in data de {get_date(cheltuiala).strftime("%d.%m.%Y")} si de tipul' \
+           f' {get_tipul(cheltuiala)}'
+
+
+def str_to_date(data):
+    try:
+        return datetime.strptime(data, "%d.%m.%Y").date()
+    except:
+        raise ValueError(
+            "data trebuie sa fie valida si sa aiba urmatorul format: DD.MM.YYYY"
+        )
