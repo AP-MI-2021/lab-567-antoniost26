@@ -1,6 +1,6 @@
 from Domain.cheltuieli import creeaza_cheltuiala, get_numar, get_id
 from Logic.crud import create, read, update, delete
-from Logic.functionalitati import add_value_to_all, max_for_type
+from Logic.functionalitati import add_value_to_date, max_for_type
 
 
 def get_data():
@@ -60,11 +60,12 @@ def test_delete():
     assert len(deleted) == len(cheltuieli) - 1
 
 
-def test_add_value_to_all():
+def test_add_value_to_date():
     cheltuieli = get_data()
     to_add = 100
+    data = '22.02.2002'
     old_list = cheltuieli
-    add_value_to_all(to_add, cheltuieli)
+    add_value_to_date(to_add, data, cheltuieli)
     assert len(old_list) == len(cheltuieli)
 
 
@@ -82,5 +83,5 @@ def test_crud():
     test_create()
     test_update()
     test_delete()
-    test_add_value_to_all()
+    test_add_value_to_date()
     test_max_for_type()

@@ -1,18 +1,26 @@
-from Domain.cheltuieli import get_suma, get_tipul
+from Domain.cheltuieli import get_suma, get_tipul, str_to_date, get_date, creeaza_cheltuiala, get_id, get_numar
+from Logic.crud import update
 
 
-def add_value_to_all(suma, cheltuieli):
+def add_value_to_date(suma, data, cheltuieli):
     '''
     Adauga o valoare sumei fiecarei cheltuiala.
     :param suma: suma care va fi adaugata cheltuielii.
     :param cheltuieli: lista de cheltuieli.
     :return: returneaza lista de cheluieli dupa ce adauga valoarea.
     '''
+    data = str_to_date(data)
     new_cheltuieli = []
     for cheltuiala in cheltuieli:
-        cheltuiala[2] += suma
-        new_cheltuieli.append(cheltuiala)
-    return new_cheltuieli
+        if get_date(cheltuiala) == data:
+            cheltuieli = update(cheltuieli, creeaza_cheltuiala(
+                get_id(cheltuiala),
+                get_numar(cheltuiala),
+                get_suma(cheltuiala) + suma,
+                get_date(cheltuiala),
+                get_tipul(cheltuiala)
+            ))
+    return cheltuieli
 
 
 def max_for_type(cheltuieli):

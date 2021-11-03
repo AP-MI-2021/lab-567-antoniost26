@@ -1,6 +1,6 @@
 from Domain.cheltuieli import get_str, creeaza_cheltuiala, get_numar, get_id
 from Logic.crud import create, read, update, delete
-from Logic.functionalitati import add_value_to_all, max_for_type
+from Logic.functionalitati import max_for_type, add_value_to_date
 from UserInterface.cli import run_cli
 
 
@@ -140,7 +140,7 @@ def handle_crud(cheltuieli):
     return cheltuieli
 
 
-def handle_add_value_to_all(cheltuieli):
+def handle_add_value_to_date(cheltuieli):
     '''
     Adauga o valoare tuturor cheltuielilor
     :param cheltuieli: lista de cheltuieli existenta deja.
@@ -148,7 +148,8 @@ def handle_add_value_to_all(cheltuieli):
     '''
     try:
         suma = float(input("Dati suma pe care doriti sa o adaugati la cheltuieli: "))
-        return add_value_to_all(suma, cheltuieli)
+        data = input("Dati data pentru care doriti sa adaugati:")
+        return add_value_to_date(suma, data, cheltuieli)
     except ValueError as ve:
         print("Eroare: {}".format(ve))
         return cheltuieli
@@ -176,7 +177,7 @@ def run_ui(cheltuieli):
         elif optiune == '3':
             cheltuieli = handle_delete_for_ap_number(cheltuieli)
         elif optiune == '4':
-            cheltuieli = handle_add_value_to_all(cheltuieli)
+            cheltuieli = handle_add_value_to_date(cheltuieli)
         elif optiune == '5':
             handle_max_for_type(cheltuieli)
         elif optiune == 'x':
