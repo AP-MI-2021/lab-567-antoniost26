@@ -9,8 +9,9 @@ def print_commands():
     print('Afisare: showall')
     print()
     print('Meniu: help')
-    print('Iesire: exit')
+    print('Iesire din CLI (va iesi in consola veche): exit')
     print('*Nota: mai multe comenzi adaugate pe acelasi rand necesita despartirea prin ";".')
+    print('**Nota: daca nu sunt erori afisate in CLI, comanda a fost efectuata cu succes.')
 
 
 def run_add(params, cheltuieli):
@@ -98,11 +99,20 @@ def run_cli(cheltuieli):
                 elif optiune[0] == 'showall':
                     run_show_all(cheltuieli)
                 elif optiune[0] == 'add':
+                    cheltuieli_vechi = cheltuieli[:]
                     cheltuieli = run_add(optiune[1:], cheltuieli)
+                    if cheltuieli_vechi != cheltuieli:
+                        print("Cheltuiala s-a adaugat cu succes.")
                 elif optiune[0] == 'delete':
+                    cheltuieli_vechi = cheltuieli[:]
                     cheltuieli = run_delete(optiune[1:], cheltuieli)
+                    if cheltuieli_vechi != cheltuieli:
+                        print("Cheltuiala a fost stearsa cu succes.")
                 elif optiune[0] == 'update':
+                    cheltuieli_vechi = cheltuieli[:]
                     cheltuieli = run_update(optiune[1:], cheltuieli)
+                    if cheltuieli_vechi != cheltuieli:
+                        print("Cheltuiala a fost modificata cu succes.")
                 else:
                     print('Optiune gresita! Reintroduceti optiunea.')
         except Exception as error:
