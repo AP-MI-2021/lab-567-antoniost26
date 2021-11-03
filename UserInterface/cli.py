@@ -11,7 +11,6 @@ def print_commands():
     print('Meniu: help')
     print('Iesire din CLI (va iesi in consola veche): exit')
     print('*Nota: mai multe comenzi adaugate pe acelasi rand necesita despartirea prin ";".')
-    print('**Nota: daca nu sunt erori afisate in CLI, comanda a fost efectuata cu succes.')
 
 
 def run_add(params, cheltuieli):

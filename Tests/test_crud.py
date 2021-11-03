@@ -1,6 +1,6 @@
 from Domain.cheltuieli import creeaza_cheltuiala, get_numar, get_id
 from Logic.crud import create, read, update, delete
-from Logic.functionalitati import add_value_to_date, max_for_type
+from Logic.functionalitati import add_value_to_date, max_for_type, sort_for_sum
 
 
 def get_data():
@@ -78,6 +78,18 @@ def test_max_for_type():
     assert rezultat['canal'] == 220.00
 
 
+def test_sort_for_sum():
+    cheltuieli = get_data()
+    rezultat = sort_for_sum(cheltuieli)
+    assert get_id(rezultat[0]) == 5
+    assert get_id(rezultat[1]) == 1
+    assert get_id(rezultat[2]) == 2
+    assert get_id(rezultat[3]) == 3
+    assert get_id(rezultat[4]) == 4
+    assert get_id(rezultat[5]) == 6
+    assert get_id(rezultat[6]) == 7
+
+
 def test_crud():
     test_read()
     test_create()
@@ -85,3 +97,4 @@ def test_crud():
     test_delete()
     test_add_value_to_date()
     test_max_for_type()
+    test_sort_for_sum()

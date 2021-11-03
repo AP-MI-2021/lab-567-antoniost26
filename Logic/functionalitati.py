@@ -39,3 +39,18 @@ def max_for_type(cheltuieli):
         else:
             rezultat[tip] = suma
     return rezultat
+
+
+def show_monthly_sum(cheltuieli):
+    pass
+
+
+
+
+def sort_for_sum(cheltuieli):
+    '''
+    Sorteaza lista descrescator in functie de suma.
+    :param cheltuieli: lista de cheltuieli.
+    :return: lista de cheltuieli sortata.
+    '''
+    return sorted(cheltuieli, key=get_suma, reverse=True)
