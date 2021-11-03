@@ -14,8 +14,9 @@ def create(lst_cheltuieli, id_cheltuiala, numar_apartament, suma, data, tipul):
     '''
     if get_by_id(id, lst_cheltuieli) is not None:
         raise ValueError("Id-ul exista deja.")
-    cheltuiala = creeaza_cheltuiala(id_cheltuiala, numar_apartament, suma, data, tipul)
-    return lst_cheltuieli + [cheltuiala]
+#    cheltuiala = creeaza_cheltuiala(id_cheltuiala, numar_apartament, suma, data, tipul)
+    return lst_cheltuieli + [creeaza_cheltuiala(id_cheltuiala, numar_apartament, suma, data, tipul)]
+
 
 def read(lst_cheltuieli, numar_apartament):
     '''
@@ -29,6 +30,7 @@ def read(lst_cheltuieli, numar_apartament):
         if get_numar(cheltuiala) == numar_apartament:
             cheltuiala_cu_nr_ap.append(cheltuiala)
     return cheltuiala_cu_nr_ap
+
 
 def update(lst_cheltuieli, new_cheltuiala):
     '''
@@ -48,6 +50,7 @@ def update(lst_cheltuieli, new_cheltuiala):
         else:
             new_cheltuieli.append(new_cheltuiala)
     return new_cheltuieli
+
 
 def delete(lst_cheltuieli, numar_apartament, id):
     '''

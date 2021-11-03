@@ -1,5 +1,4 @@
-from datetime import date, datetime
-
+from datetime import datetime
 
 tipuri_permise = ['intretinere', 'canal', 'alte cheltuieli']
 
@@ -87,7 +86,7 @@ def get_tipul(cheltuiala):
 
 
 def get_str(cheltuiala):
-    return f'Cheltuiala cu id-ul {get_id(cheltuiala)}, pentru numarul apartamentului {get_numar(cheltuiala)}, cu suma '\
+    return f'Cheltuiala cu id-ul {get_id(cheltuiala)}, pentru numarul apartamentului {get_numar(cheltuiala)}, cu suma ' \
            f'de {get_suma(cheltuiala)} lei, in data de {get_date(cheltuiala).strftime("%d.%m.%Y")} si de tipul' \
            f' {get_tipul(cheltuiala)}'
 

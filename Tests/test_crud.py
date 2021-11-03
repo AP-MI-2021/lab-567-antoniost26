@@ -1,4 +1,4 @@
-from Domain.cheltuieli import creeaza_cheltuiala, get_numar, get_id, get_suma
+from Domain.cheltuieli import creeaza_cheltuiala, get_numar, get_id
 from Logic.crud import create, read, update, delete
 from Logic.functionalitati import add_value_to_all, max_for_type
 
@@ -84,4 +84,3 @@ def test_crud():
     test_delete()
     test_add_value_to_all()
     test_max_for_type()
-
