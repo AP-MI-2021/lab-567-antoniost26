@@ -45,8 +45,6 @@ def show_monthly_sum(cheltuieli):
     pass
 
 
-
-
 def sort_for_sum(cheltuieli):
     '''
     Sorteaza lista descrescator in functie de suma.

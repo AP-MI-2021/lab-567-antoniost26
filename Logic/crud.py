@@ -1,7 +1,7 @@
 from Domain.cheltuieli import creeaza_cheltuiala, get_numar, get_id, get_by_id
 
 
-def create(lst_cheltuieli, id_cheltuiala, numar_apartament, suma, data, tipul):
+def create(lst_cheltuieli, id_cheltuiala, numar_apartament, suma, data, tipul, undoList, redoList):
     '''
     Creeaza o cheltuiala.
     :param lst_cheltuieli: lista veche de cheltuieli.
@@ -12,10 +12,13 @@ def create(lst_cheltuieli, id_cheltuiala, numar_apartament, suma, data, tipul):
     :param tipul: tipul cheltuielii, intretinere/canal/alte cheltuieli.
     :return: returneaza o lista in care este adaugata noua cheltuiala.
     '''
-    if get_by_id(id, lst_cheltuieli) is not None:
+    if get_by_id(id_cheltuiala, lst_cheltuieli) is not None:
         raise ValueError("Id-ul exista deja.")
-#    cheltuiala = creeaza_cheltuiala(id_cheltuiala, numar_apartament, suma, data, tipul)
-    return lst_cheltuieli + [creeaza_cheltuiala(id_cheltuiala, numar_apartament, suma, data, tipul)]
+    cheltuiala = creeaza_cheltuiala(id_cheltuiala, numar_apartament, suma, data, tipul)
+    rezultat = lst_cheltuieli + [cheltuiala]
+    undoList.append(lst_cheltuieli)
+    redoList.clear()
+    return rezultat
 
 
 def read(lst_cheltuieli, numar_apartament):
@@ -32,7 +35,7 @@ def read(lst_cheltuieli, numar_apartament):
     return cheltuiala_cu_nr_ap
 
 
-def update(lst_cheltuieli, new_cheltuiala):
+def update(lst_cheltuieli, new_cheltuiala, undoList, redoList):
     '''
     Modifica o cheltuiala anume in functie de numarul de apartament SI id.
     :param lst_cheltuieli: lista cu cheltuieli.
@@ -49,10 +52,12 @@ def update(lst_cheltuieli, new_cheltuiala):
             new_cheltuieli.append(cheltuiala)
         else:
             new_cheltuieli.append(new_cheltuiala)
+    undoList.append(lst_cheltuieli)
+    redoList.clear()
     return new_cheltuieli
 
 
-def delete(lst_cheltuieli, numar_apartament, id):
+def delete(lst_cheltuieli, numar_apartament, id, undoList, redoList):
     '''
     Sterge o cheltuiala a unui apartament.
     :param lst_cheltuieli: lista cu cheltuielile.
@@ -66,4 +71,6 @@ def delete(lst_cheltuieli, numar_apartament, id):
         new_cheltuieli.append(cheltuiala)
     for cheltuiala in [x for x in lst_cheltuieli if numar_apartament == get_numar(x) and id != get_id(x)]:
         new_cheltuieli.append(cheltuiala)
+    undoList.append(lst_cheltuieli)
+    redoList.clear()
     return new_cheltuieli

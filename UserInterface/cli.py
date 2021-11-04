@@ -7,13 +7,15 @@ def print_commands():
     print('Stergere: delete [id] [numar apartament]')
     print('Modificare: update [id] [nr apartament] [suma] [data] [tip]')
     print('Afisare: showall')
+    print('Undo: undo')
+    print('Redo: redo')
     print()
     print('Meniu: help')
     print('Iesire din CLI (va iesi in consola veche): exit')
     print('*Nota: mai multe comenzi adaugate pe acelasi rand necesita despartirea prin ";".')
 
 
-def run_add(params, cheltuieli):
+def run_add(params, cheltuieli, undoList, redoList):
     '''
     Adauga o cheltuiala noua in lista cu cheltuieli.
     :param params: detaliile noii cheltuieli.
@@ -28,13 +30,13 @@ def run_add(params, cheltuieli):
         tip = str(params[4])
         if get_by_id(id, cheltuieli) is not None:
             raise ValueError("Id-ul exista deja.")
-        return create(cheltuieli, id, numar, suma, data, tip)
+        return create(cheltuieli, id, numar, suma, data, tip, undoList, redoList)
     except ValueError as ve:
         print("Eroare: {}".format(ve))
         return cheltuieli
 
 
-def run_delete(params, cheltuieli):
+def run_delete(params, cheltuieli, undoList, redoList):
     '''
     Sterge o cheltuiala din lista.
     :param params: numarul apartamentului si id-ul cheltuielii, retinute intr-o lista.
@@ -44,13 +46,13 @@ def run_delete(params, cheltuieli):
     try:
         numar_ap = int(params[1])
         id_ap = int(params[0])
-        return delete(cheltuieli, numar_ap, id_ap)
+        return delete(cheltuieli, numar_ap, id_ap, undoList, redoList)
     except ValueError as ve:
         print("Eroare: {}".format(ve))
         return cheltuieli
 
 
-def run_update(params, cheltuieli):
+def run_update(params, cheltuieli, undoList, redoList):
     '''
     Modifica o cheltuiala existenta.
     :param params: detaliile cheltuielii.
@@ -64,7 +66,7 @@ def run_update(params, cheltuieli):
         data = str(params[3])
         tip = str(params[4])
         new_cheltuiala = creeaza_cheltuiala(id, numar, suma, data, tip)
-        return update(cheltuieli, new_cheltuiala)
+        return update(cheltuieli, new_cheltuiala, undoList, redoList)
     except ValueError as ve:
         print("Eroare: {}".format(ve))
         return cheltuieli
@@ -82,7 +84,8 @@ def run_show_all(cheltuieli):
 
 def run_cli(cheltuieli):
     print_commands()
-
+    undoList = []
+    redoList = []
     while True:
         optiuni = input('$ ')
         optiuni = optiuni.split(';')
@@ -99,19 +102,31 @@ def run_cli(cheltuieli):
                     run_show_all(cheltuieli)
                 elif optiune[0] == 'add':
                     cheltuieli_vechi = cheltuieli[:]
-                    cheltuieli = run_add(optiune[1:], cheltuieli)
+                    cheltuieli = run_add(optiune[1:], cheltuieli, undoList, redoList)
                     if cheltuieli_vechi != cheltuieli:
                         print("Cheltuiala s-a adaugat cu succes.")
                 elif optiune[0] == 'delete':
                     cheltuieli_vechi = cheltuieli[:]
-                    cheltuieli = run_delete(optiune[1:], cheltuieli)
+                    cheltuieli = run_delete(optiune[1:], cheltuieli, undoList, redoList)
                     if cheltuieli_vechi != cheltuieli:
                         print("Cheltuiala a fost stearsa cu succes.")
                 elif optiune[0] == 'update':
                     cheltuieli_vechi = cheltuieli[:]
-                    cheltuieli = run_update(optiune[1:], cheltuieli)
+                    cheltuieli = run_update(optiune[1:], cheltuieli, undoList, redoList)
                     if cheltuieli_vechi != cheltuieli:
                         print("Cheltuiala a fost modificata cu succes.")
+                elif optiune[0] == 'undo':
+                    if len(undoList) > 0:
+                        redoList.append(cheltuieli)
+                        cheltuieli = undoList.pop()
+                    else:
+                        print("Nu se poate face undo.")
+                elif optiune[0] == 'redo':
+                    if len(redoList) > 0:
+                        undoList.append(cheltuieli)
+                        cheltuieli = redoList.pop()
+                    else:
+                        print("Nu se poate face redo.")
                 else:
                     print('Optiune gresita! Reintroduceti optiunea.')
         except Exception as error:

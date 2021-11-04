@@ -1,13 +1,13 @@
 import copy
 
-from Domain.cheltuieli import get_str, creeaza_cheltuiala, get_numar, get_id, get_by_id, get_suma, get_date, get_tipul
+from Domain.cheltuieli import get_str, creeaza_cheltuiala, get_numar, get_id
 from Logic.crud import create, read, update, delete
 from Logic.functionalitati import max_for_type, add_value_to_date, sort_for_sum
 from UserInterface.cli import run_cli
 
 
 def show_menu():
-    print("1. Deschideti interfata CRUD.")
+    print("1. Deschideti meniul CRUD.")
     print("2. Deschideti interfata CLI.")
     print("x. Iesire")
 
@@ -24,10 +24,7 @@ def handle_add(cheltuieli, undoList, redoList):
         suma = float(input('Introduceti suma chetuielii: '))
         data = str(input('Introduceti data cheltuielii, in format DD.MM.YYYY: '))
         tip = str(input('Introduceti tipul cheltuielii (intretinere/canal/alte cheltuieli): '))
-        rezultat = create(cheltuieli, id, numar, suma, data, tip)
-        undoList.append(cheltuieli)
-        redoList.clear()
-        return rezultat
+        return create(cheltuieli, id, numar, suma, data, tip, undoList, redoList)
     except ValueError as ve:
         print("Eroare: {}".format(ve))
         return cheltuieli
@@ -68,9 +65,7 @@ def handle_update(cheltuieli, undoList, redoList):
         data = str(input('Introduceti data cheltuielii, in format DD.MM.YYYY: '))
         tip = str(input('Introduceti tipul cheltuielii (intretinere/canal/alte cheltuieli): '))
         new_cheltuiala = creeaza_cheltuiala(id, numar, suma, data, tip)
-        rezultat = update(cheltuieli, new_cheltuiala)
-        undoList.append(cheltuieli)
-        redoList.clear()
+        rezultat = update(cheltuieli, new_cheltuiala, undoList, redoList)
         return rezultat
     except ValueError as ve:
         print("Eroare: {}".format(ve))
@@ -87,8 +82,7 @@ def handle_delete(cheltuieli, undoList, redoList):
         numar_ap = int(input('Dati apartamentul a carei cheltuieli doriti sa o stergeti: '))
         handle_cheltuieli_apartament(cheltuieli, numar_ap)
         id_ap = int(input('Dati id-ul cheltuielii pe care doriti sa o stergeti: '))
-        rezultat = delete(cheltuieli, numar_ap, id_ap)
-        undoList.append(cheltuieli)
+        rezultat = delete(cheltuieli, numar_ap, id_ap, undoList, redoList)
         return rezultat
     except ValueError as ve:
         print("Eroare: {}".format(ve))
@@ -104,9 +98,13 @@ def handle_delete_for_ap_number(cheltuieli, undoList, redoList):
     try:
         nr_ap = int(input('Introduceti numarul apartamentului pentru care doriti sa stergeti toate cheltuielile: '))
         rezultat = copy.deepcopy(cheltuieli)
+        for_pop = 0
         for cheltuiala in rezultat:
             if nr_ap == get_numar(cheltuiala):
-                rezultat = delete(rezultat, get_numar(cheltuiala), get_id(cheltuiala))
+                rezultat = delete(rezultat, get_numar(cheltuiala), get_id(cheltuiala), undoList, redoList)
+                for_pop += 1
+        for x in range(for_pop):
+            undoList.pop()
         undoList.append(cheltuieli)
         redoList.clear()
         return rezultat
@@ -124,13 +122,11 @@ def show_crud_menu():
     print("6. Adunarea unei valori la toate cheltuielile dintr-o dată citită.")
     print("7. Determinarea celei mai mari cheltuieli pentru fiecare tip de cheltuială.")
     print("8. Ordonarea cheltuielilor descrescător după sumă.")
+    print("9. Afișarea sumelor lunare pentru fiecare apartament.")
     print("u. Undo.")
     print("r. Redo.")
     print('a. Afisare toate cheltuielile')
     print('x. Revenire')
-
-
-
 
 
 def handle_add_value_to_date(cheltuieli, undoList, redoList):
@@ -165,6 +161,43 @@ def handle_max_for_type(cheltuieli):
 def handle_sort_for_sum(cheltuieli):
     handle_show_all(sort_for_sum(cheltuieli))
 
+
+def redo(cheltuieli, redoList, undoList):
+    '''
+    Functie de redo.
+    :param cheltuieli: lista de cheltuieli.
+    :param redoList: istoricul listelor, dupa operatia de undo.
+    :param undoList: istoricul listelor, inainte de fiecare modificare.
+    :return: in caz ca exista operatii de redo, returneaza lista dupa redo, in caz contrar, returneaza lista nemodificata
+    '''
+    if len(redoList) > 0:
+        undoList.append(cheltuieli)
+        cheltuieli = redoList.pop()
+        return cheltuieli
+    else:
+        return cheltuieli
+
+
+def undo(cheltuieli, undoList, redoList):
+    '''
+    Functie de undo.
+    :param cheltuieli: lista de cheltuieli
+    :param undoList: istoricul listelor, inainte de fiecare modificare.
+    :param redoList: istoricul listelor, dupa operatia de undo.
+    :return: in caz ca exista operatii de undo, returneaza lista dupa undo, in caz contrar, returneaza lista nemodificata
+    '''
+    if len(undoList) > 0:
+        redoList.append(cheltuieli)
+        cheltuieli = undoList.pop()
+        return cheltuieli
+    else:
+        return cheltuieli
+
+
+def handle_monthly_sum(cheltuieli):
+    pass
+
+
 def handle_crud(cheltuieli):
     undoList = []
     redoList = []
@@ -193,18 +226,18 @@ def handle_crud(cheltuieli):
             handle_max_for_type(cheltuieli)
         elif optiune == '8':
             handle_sort_for_sum(cheltuieli)
+        elif optiune == '9':
+            handle_monthly_sum(cheltuieli)
         elif optiune == 'u':
-            if len(undoList) > 0:
-                redoList.append(cheltuieli)
-                cheltuieli = undoList.pop()
+            if cheltuieli != undo(cheltuieli, undoList, redoList):
+                cheltuieli = undo(cheltuieli, undoList, redoList)
             else:
-                print('Nu se poate face undo.')
+                print("Nu se poate face undo.")
         elif optiune == 'r':
-            if len(redoList) > 0:
-                undoList.append(cheltuieli)
-                cheltuieli = redoList.pop()
+            if cheltuieli != redo(cheltuieli, redoList, undoList):
+                cheltuieli = redo(cheltuieli, redoList, undoList)
             else:
-                print('Nu se poate face redo.')
+                print("Nu se poate face redo.")
         elif optiune == 'a':
             handle_show_all(cheltuieli)
         elif optiune == 'x':
