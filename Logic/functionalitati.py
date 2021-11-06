@@ -41,9 +41,24 @@ def max_for_type(cheltuieli):
     return rezultat
 
 
-def show_monthly_sum(cheltuieli):
-    pass
+def monthly_sum(cheltuieli):
+    '''
+    Calculeaza suma lunara pentru fiecare apartament.
+    :param cheltuieli: lista de cheltuieli.
+    :return: un dictionar cu sumele lunare a fiecarui apartament.
+    '''
+    sum = {}
+    for cheltuiala in cheltuieli:
+        luna = get_date(cheltuiala).strftime("%m %Y")
+        nrAp = get_numar(cheltuiala)
+        if luna not in sum:
+            sum[luna] = {}
+        if nrAp in sum[luna]:
+            sum[luna][nrAp] += get_suma(cheltuiala)
+        else:
+            sum[luna][nrAp] = get_suma(cheltuiala)
 
+    return sum
 
 def sort_for_sum(cheltuieli):
     '''

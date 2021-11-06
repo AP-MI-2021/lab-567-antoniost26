@@ -1,6 +1,6 @@
 from Domain.cheltuieli import creeaza_cheltuiala, get_numar, get_id
 from Logic.crud import create, read, update, delete
-from Logic.functionalitati import add_value_to_date, max_for_type, sort_for_sum
+from Logic.functionalitati import add_value_to_date, max_for_type, sort_for_sum, monthly_sum
 from Tests.test_undo_redo import test_undo_redo
 
 
@@ -93,12 +93,18 @@ def test_sort_for_sum():
     assert get_id(rezultat[6]) == 7
 
 
-def test_crud():
-    test_read()
-    test_create()
-    test_update()
-    test_delete()
+def test_monthly_sum():
+    cheltuieli = get_data()
+    cheltuieli.append(creeaza_cheltuiala(13, 145, 200, "03.06.2021", 'canal'))
+    sume = monthly_sum(cheltuieli)
+    assert len(sume) == 2
+    assert len(sume["05 2002"]) == 4
+    assert sume["06 2021"][145] == 200
+
+
+def all_tests():
     test_add_value_to_date()
     test_max_for_type()
     test_sort_for_sum()
     test_undo_redo()
+    test_monthly_sum()

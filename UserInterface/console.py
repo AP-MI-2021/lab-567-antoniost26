@@ -2,7 +2,7 @@ import copy
 
 from Domain.cheltuieli import get_str, creeaza_cheltuiala, get_numar, get_id
 from Logic.crud import create, read, update, delete
-from Logic.functionalitati import max_for_type, add_value_to_date, sort_for_sum
+from Logic.functionalitati import max_for_type, add_value_to_date, sort_for_sum, monthly_sum
 from UserInterface.cli import run_cli
 
 
@@ -195,7 +195,11 @@ def undo(cheltuieli, undoList, redoList):
 
 
 def handle_monthly_sum(cheltuieli):
-    pass
+    sums = monthly_sum(cheltuieli)
+    for sum in monthly_sum(cheltuieli):
+        print(f'Pentru luna si anul {sum} suma este: ')
+        for nrAp in sums[sum]:
+            print(f'* pentru apartamentul {nrAp} suma este {sums[sum][nrAp]}')
 
 
 def handle_crud(cheltuieli):
