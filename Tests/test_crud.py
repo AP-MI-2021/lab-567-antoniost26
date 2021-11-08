@@ -1,6 +1,8 @@
-from Domain.cheltuieli import creeaza_cheltuiala, get_numar, get_id
+import copy
+
+from Domain.cheltuieli import creeaza_cheltuiala, get_numar, get_id, get_suma
 from Logic.crud import create, read, update, delete
-from Logic.functionalitati import add_value_to_date, max_for_type, sort_for_sum, monthly_sum
+from Logic.functionalitati import add_value_to_date, max_for_type, sort_for_sum, monthly_sum, delete_for_ap_number
 from Tests.test_undo_redo import test_undo_redo
 
 
@@ -66,10 +68,11 @@ def test_delete():
 def test_add_value_to_date():
     cheltuieli = get_data()
     to_add = 100
-    data = '22.02.2002'
-    old_list = cheltuieli
-    add_value_to_date(to_add, data, cheltuieli)
+    data = '25.05.2002'
+    old_list = copy.deepcopy(cheltuieli)
+    cheltuieli = add_value_to_date(to_add, data, cheltuieli, undoList=[], redoList=[])
     assert len(old_list) == len(cheltuieli)
+    assert old_list != cheltuieli
 
 
 def test_max_for_type():
@@ -79,6 +82,16 @@ def test_max_for_type():
     assert rezultat['intretinere'] == 202.00
     assert rezultat['alte cheltuieli'] == 200.00
     assert rezultat['canal'] == 220.00
+
+
+def test_delete_for_ap_number():
+    cheltuieli = get_data()
+    nr_ap = 99
+    old_cheltuieli = copy.deepcopy(cheltuieli)
+    cheltuieli = delete_for_ap_number(cheltuieli, nr_ap, undoList=[], redoList=[])
+    assert len(cheltuieli) != len(old_cheltuieli)
+    cheltuieli2 = read(cheltuieli, nr_ap)
+    assert cheltuieli2 == []
 
 
 def test_sort_for_sum():
@@ -91,6 +104,7 @@ def test_sort_for_sum():
     assert get_id(rezultat[4]) == 4
     assert get_id(rezultat[5]) == 6
     assert get_id(rezultat[6]) == 7
+    assert sort_for_sum(cheltuieli) == sorted(cheltuieli, key=get_suma, reverse=True)
 
 
 def test_monthly_sum():
@@ -108,3 +122,9 @@ def all_tests():
     test_sort_for_sum()
     test_undo_redo()
     test_monthly_sum()
+    test_delete_for_ap_number()
+    test_create()
+    test_delete()
+    test_update()
+    test_read()
+

@@ -98,3 +98,9 @@ def str_to_date(data):
         raise ValueError(
             "data trebuie sa fie valida si sa aiba urmatorul format: DD.MM.YYYY"
         )
+
+
+def getByApNumber(cheltuieli, nrAp):
+    for cheltuiala in cheltuieli:
+        if get_numar(cheltuiala) == nrAp:
+            return cheltuiala

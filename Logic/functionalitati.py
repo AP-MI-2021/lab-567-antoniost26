@@ -1,14 +1,17 @@
+import copy
+
 from Domain.cheltuieli import get_suma, get_tipul, str_to_date, get_date, creeaza_cheltuiala, get_id, get_numar
-from Logic.crud import update
+from Logic.crud import update, delete
 
 
-def add_value_to_date(suma, data, cheltuieli):
+def add_value_to_date(suma, data, cheltuieli, undoList, redoList):
     '''
     Adauga o valoare sumei fiecarei cheltuiala.
     :param suma: suma care va fi adaugata cheltuielii.
     :param cheltuieli: lista de cheltuieli.
     :return: returneaza lista de cheluieli dupa ce adauga valoarea.
     '''
+    for_pop = 0
     data = str_to_date(data)
     new_cheltuieli = []
     for cheltuiala in cheltuieli:
@@ -18,8 +21,11 @@ def add_value_to_date(suma, data, cheltuieli):
                 get_numar(cheltuiala),
                 get_suma(cheltuiala) + suma,
                 get_date(cheltuiala),
-                get_tipul(cheltuiala)
-            ))
+                get_tipul(cheltuiala),
+            ), undoList, redoList)
+            for_pop+=1
+    for i in range(for_pop-1):
+        undoList.pop()
     return cheltuieli
 
 
@@ -67,3 +73,17 @@ def sort_for_sum(cheltuieli):
     :return: lista de cheltuieli sortata.
     '''
     return sorted(cheltuieli, key=get_suma, reverse=True)
+
+
+def delete_for_ap_number(cheltuieli, nr_ap, undoList, redoList):
+    rezultat = copy.deepcopy(cheltuieli)
+    for_pop = 0
+    for cheltuiala in rezultat:
+        if nr_ap == get_numar(cheltuiala):
+            rezultat = delete(rezultat, get_numar(cheltuiala), get_id(cheltuiala), undoList, redoList)
+            for_pop += 1
+    for x in range(for_pop):
+        undoList.pop()
+    undoList.append(cheltuieli)
+    redoList.clear()
+    return rezultat

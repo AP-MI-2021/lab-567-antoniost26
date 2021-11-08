@@ -1,8 +1,6 @@
-import copy
-
-from Domain.cheltuieli import get_str, creeaza_cheltuiala, get_numar, get_id
+from Domain.cheltuieli import get_str, creeaza_cheltuiala
 from Logic.crud import create, read, update, delete
-from Logic.functionalitati import max_for_type, add_value_to_date, sort_for_sum, monthly_sum
+from Logic.functionalitati import max_for_type, add_value_to_date, sort_for_sum, monthly_sum, delete_for_ap_number
 from UserInterface.cli import run_cli
 
 
@@ -97,16 +95,7 @@ def handle_delete_for_ap_number(cheltuieli, undoList, redoList):
     '''
     try:
         nr_ap = int(input('Introduceti numarul apartamentului pentru care doriti sa stergeti toate cheltuielile: '))
-        rezultat = copy.deepcopy(cheltuieli)
-        for_pop = 0
-        for cheltuiala in rezultat:
-            if nr_ap == get_numar(cheltuiala):
-                rezultat = delete(rezultat, get_numar(cheltuiala), get_id(cheltuiala), undoList, redoList)
-                for_pop += 1
-        for x in range(for_pop):
-            undoList.pop()
-        undoList.append(cheltuieli)
-        redoList.clear()
+        rezultat = delete_for_ap_number(cheltuieli, nr_ap, undoList, redoList)
         return rezultat
     except ValueError as ve:
         print("Eroare: {}".format(ve))
@@ -138,7 +127,7 @@ def handle_add_value_to_date(cheltuieli, undoList, redoList):
     try:
         suma = float(input("Dati suma pe care doriti sa o adaugati la cheltuieli: "))
         data = input("Dati data pentru care doriti sa adaugati:")
-        rezultat = add_value_to_date(suma, data, cheltuieli)
+        rezultat = add_value_to_date(suma, data, cheltuieli, undoList, redoList)
         undoList.append(cheltuieli)
         redoList.clear()
         return rezultat
