@@ -144,7 +144,7 @@ def handle_max_for_type(cheltuieli):
     '''
     rezultat = max_for_type(cheltuieli)
     for tip in rezultat:
-        print("Pentru cheltuiala de tip {} suma maxima este: {} lei.".format(tip, rezultat[tip]))
+        print("Pentru cheltuiala de tip {} maximul este: {} lei.".format(tip, rezultat[tip]))
 
 
 def handle_sort_for_sum(cheltuieli):
@@ -164,12 +164,11 @@ def redo(cheltuieli, redoList, undoList):
     :param undoList: istoricul listelor, inainte de fiecare modificare.
     :return: in caz ca exista operatii de redo, returneaza lista dupa redo, in caz contrar, returneaza lista nemodificata
     '''
-    if len(redoList) > 0:
-        undoList.append(cheltuieli)
-        cheltuieli = redoList.pop()
+    if len(redoList) == 0:
         return cheltuieli
-    else:
-        return cheltuieli
+    undoList.append(cheltuieli)
+    lista = redoList.pop()
+    return lista
 
 
 def undo(cheltuieli, undoList, redoList):
@@ -180,18 +179,17 @@ def undo(cheltuieli, undoList, redoList):
     :param redoList: istoricul listelor, dupa operatia de undo.
     :return: in caz ca exista operatii de undo, returneaza lista dupa undo, in caz contrar, returneaza lista nemodificata
     '''
-    if len(undoList) > 0:
-        redoList.append(cheltuieli)
-        cheltuieli = undoList.pop()
+    if len(undoList) == 0:
         return cheltuieli
-    else:
-        return cheltuieli
+    redoList.append(cheltuieli)
+    lista = undoList.pop()
+    return lista
 
 
 def handle_monthly_sum(cheltuieli):
     sums = monthly_sum(cheltuieli)
     for sum in monthly_sum(cheltuieli):
-        print(f'Pentru luna si anul {sum} suma este: ')
+        print(f'Pentru luna si anul {sum}:')
         for nrAp in sums[sum]:
             print(f'* pentru apartamentul {nrAp} suma este {sums[sum][nrAp]}')
 
@@ -227,15 +225,9 @@ def handle_crud(cheltuieli):
         elif optiune == '9':
             handle_monthly_sum(cheltuieli)
         elif optiune == 'u':
-            if cheltuieli != undo(cheltuieli, undoList, redoList):
-                cheltuieli = undo(cheltuieli, undoList, redoList)
-            else:
-                print("Nu se poate face undo.")
+            cheltuieli = undo(cheltuieli,undoList, redoList)
         elif optiune == 'r':
-            if cheltuieli != redo(cheltuieli, redoList, undoList):
-                cheltuieli = redo(cheltuieli, redoList, undoList)
-            else:
-                print("Nu se poate face redo.")
+            cheltuieli = redo(cheltuieli, redoList, undoList)
         elif optiune == 'a':
             handle_show_all(cheltuieli)
         elif optiune == 'x':

@@ -1,3 +1,5 @@
+import copy
+
 from Domain.cheltuieli import creeaza_cheltuiala, get_numar, get_id, get_by_id
 
 
@@ -15,7 +17,7 @@ def create(lst_cheltuieli, id_cheltuiala, numar_apartament, suma, data, tipul, u
     if get_by_id(id_cheltuiala, lst_cheltuieli) is not None:
         raise ValueError("Id-ul exista deja.")
     cheltuiala = creeaza_cheltuiala(id_cheltuiala, numar_apartament, suma, data, tipul)
-    rezultat = lst_cheltuieli + [cheltuiala]
+    rezultat = copy.deepcopy(lst_cheltuieli) + [cheltuiala]
     undoList.append(lst_cheltuieli)
     redoList.clear()
     return rezultat

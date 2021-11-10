@@ -4,7 +4,7 @@ from UserInterface.console import run_ui
 
 
 def main():
-    cheltuieli = get_data()
+    cheltuieli = []
     cheltuieli = run_ui(cheltuieli)
 
 

@@ -14,7 +14,7 @@ def creeaza_cheltuiala(id_cheltuiala: int, numar_apartament: int, suma: float, d
     :return: o cheltuiala.
     '''
     if tipul not in tipuri_permise:
-        raise ValueError(f"tipurile permise sunt: {tipuri_permise}")
+        raise ValueError(f"tipurile permise sunt: {tipuri_permise[0]}, {tipuri_permise[1]}, {tipuri_permise[2]}")
 
     if isinstance(data, str):
         data = str_to_date(data)
@@ -101,6 +101,11 @@ def str_to_date(data):
 
 
 def getByApNumber(cheltuieli, nrAp):
-    for cheltuiala in cheltuieli:
-        if get_numar(cheltuiala) == nrAp:
-            return cheltuiala
+    try:
+        for cheltuiala in cheltuieli:
+            if get_numar(cheltuiala) == nrAp:
+                return cheltuiala
+    except IndexError as ie:
+        print(print("Eroare: {}".format(ie)))
+    except ValueError as ve:
+        print("Eroare: {}".format(ve))
