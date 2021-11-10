@@ -148,6 +148,11 @@ def handle_max_for_type(cheltuieli):
 
 
 def handle_sort_for_sum(cheltuieli):
+    '''
+    Functie care se ocupa de sortarea dupa suma.
+    :param cheltuieli: lista de cheltuieli.
+    :return: afiseaza lista de cheltuieli ordonata dupa suma.
+    '''
     handle_show_all(sort_for_sum(cheltuieli))
 
 

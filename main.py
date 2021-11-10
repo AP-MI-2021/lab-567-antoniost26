@@ -1,10 +1,10 @@
-from Tests.test_crud import all_tests
+from Tests.test_crud import all_tests, get_data
 
 from UserInterface.console import run_ui
 
 
 def main():
-    cheltuieli = []
+    cheltuieli = get_data()
     cheltuieli = run_ui(cheltuieli)
 
 

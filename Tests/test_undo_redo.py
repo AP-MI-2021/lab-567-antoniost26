@@ -1,3 +1,5 @@
+import copy
+
 from Domain.cheltuieli import get_id
 from Logic.crud import create
 from UserInterface.console import undo, redo
@@ -50,6 +52,6 @@ def test_undo_redo():
     assert len(cheltuieli) == 2
     assert get_id(cheltuieli[0]) == 1
     assert get_id(cheltuieli[1]) == 4
-    cheltuieli_test = cheltuieli
+    cheltuieli_test = copy.deepcopy(cheltuieli)
     cheltuieli = redo(cheltuieli, redoList, undoList)
     assert cheltuieli_test == cheltuieli
