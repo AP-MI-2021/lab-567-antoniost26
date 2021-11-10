@@ -57,8 +57,9 @@ def handle_update(cheltuieli, undoList, redoList):
     :return: lista de cheltuieli dupa ce a fost modificata.
     '''
     try:
-        id = int(input('Introduceti id-ul cheltuielii: '))
         numar = int(input('Introduceti numarul apartamentului: '))
+        handle_cheltuieli_apartament(cheltuieli, numar)
+        id = int(input('Introduceti id-ul cheltuielii: '))
         suma = float(input('Introduceti suma chetuielii: '))
         data = str(input('Introduceti data cheltuielii, in format DD.MM.YYYY: '))
         tip = str(input('Introduceti tipul cheltuielii (intretinere/canal/alte cheltuieli): '))
@@ -225,9 +226,15 @@ def handle_crud(cheltuieli):
         elif optiune == '9':
             handle_monthly_sum(cheltuieli)
         elif optiune == 'u':
-            cheltuieli = undo(cheltuieli,undoList, redoList)
+            if len(undoList) == 0:
+                print("Nu se mai poate face undo.")
+            else:
+                cheltuieli = undo(cheltuieli,undoList, redoList)
         elif optiune == 'r':
-            cheltuieli = redo(cheltuieli, redoList, undoList)
+            if len(redoList) == 0:
+                print("Nu se mai poate face redo")
+            else:
+                cheltuieli = redo(cheltuieli, redoList, undoList)
         elif optiune == 'a':
             handle_show_all(cheltuieli)
         elif optiune == 'x':
